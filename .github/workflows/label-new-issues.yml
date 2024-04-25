@@ -42,8 +42,6 @@ jobs:
           
           echo "BRANCH_FULL_NAME=$BRANCH_NAME" >> "$GITHUB_OUPUT"
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
 
