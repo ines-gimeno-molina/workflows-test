@@ -31,33 +31,33 @@ jobs:
       - name: Set Branch Name
         id: set_branch_name
         run: |
-          # Extract issue number
-          ISSUE_NUMBER=${{ github.event.issue.number }}
-          
           # Extract issue title and replace spaces with hyphens
-          ISSUE_TITLE=$(echo "${{ github.event.issue.title }}" | tr ' ' '-')
+          ISSUE_TITLE=$(echo "$ISSUE_TITLE" | tr ' ' '-')
           
           # Concatenate issue number and transformed title to form branch name
-          BRANCH_NAME="issue-${ISSUE_NUMBER}-${ISSUE_TITLE}"
+          BRANCH_NAME="${ISSUE_NUMBER}-${ISSUE_TITLE}"
           
-          echo "::set-output name=branch_name::$BRANCH_NAME"
+          echo "BRANCH_FULL_NAME=BRANCH_NAME >> $GITHUB_OUPUT"
         env:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
 
-      - name: Create Branch and PR
-        id: create_branch_pr
+      - name: Create Branch 
+        id: create_branch
         run: |
           git checkout main
           git pull
           git checkout -b $BRANCH_NAME
           git push origin $BRANCH_NAME
-          echo "::set-output name=branch_name::$BRANCH_NAME"
-          echo "::set-output name=branch_sha::$(git rev-parse HEAD)"
+          echo "BRANCH_FULL_NAME=BRANCH_NAME >> $GITHUB_OUPUT"
+          echo "BRANCH_SHA=$(git rev-parse HEAD) >> $GITHUB_OUPUT"
         env:
-          BRANCH_NAME: issue-${{ github.event.issue.number }}
+          BRANCH_NAME: ${{ steps.set_branch_name.outputs.BRANCH_FULL_NAME }}
       
       - name: Create Pull Request
         run: gh pr create --title "$BRANCH_NAME" --body "test" --head "${{ steps.create_branch_pr.outputs.branch_name }}" --base "main"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: ${{ steps.create_branch.outputs.BRANCH_FULL_NAME }}
+          BRANCH_SHA: ${{ steps.create_branch.outputs.BRANCH_SHA }}
 
