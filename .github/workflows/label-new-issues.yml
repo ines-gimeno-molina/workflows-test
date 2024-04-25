@@ -24,9 +24,6 @@ jobs:
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.issue.number }}
           LABELS: test
-          
-      - name: Checkout repository
-        uses: actions/checkout@v2
         
       - name: Set Branch Name
         id: set-branch-name
@@ -44,6 +41,9 @@ jobs:
         env:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Create Branch 
         id: create-branch
