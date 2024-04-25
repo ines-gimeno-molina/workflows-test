@@ -24,6 +24,8 @@ jobs:
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.issue.number }}
           LABELS: test
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Create Branch and PR
         id: create_branch_pr
@@ -35,7 +37,7 @@ jobs:
           echo "::set-output name=branch_name::$BRANCH_NAME"
           echo "::set-output name=branch_sha::$(git rev-parse HEAD)"
         env:
-          BRANCH_NAME: issue-${{ github.event.issue.number }}-${{ github.event.issue.title }}
+          BRANCH_NAME: issue-${{ github.event.issue.number }}
       
       - name: Create Pull Request
         run: gh pr create --title "$BRANCH_NAME" --body "test" --head "${{ steps.create_branch_pr.outputs.branch_name }}" --base "main"
