@@ -24,8 +24,25 @@ jobs:
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.issue.number }}
           LABELS: test
+          
       - name: Checkout repository
         uses: actions/checkout@v2
+        
+      - name: Set Branch Name
+        id: set_branch_name
+        run: |
+          # Extract issue number
+          ISSUE_NUMBER=${{ github.event.issue.number }}
+          
+          # Extract issue title and replace spaces with hyphens
+          ISSUE_TITLE=$(echo "${{ github.event.issue.title }}" | tr ' ' '-')
+          
+          # Concatenate issue number and transformed title to form branch name
+          BRANCH_NAME="issue-${ISSUE_NUMBER}-${ISSUE_TITLE}"
+          
+          echo "::set-output name=branch_name::$BRANCH_NAME"
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
 
       - name: Create Branch and PR
         id: create_branch_pr
