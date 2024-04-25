@@ -40,7 +40,7 @@ jobs:
           BRANCH_NAME="${ISSUE_NUMBER}-${ISSUE_TITLE}"
           echo "full branch name: $BRANCH_NAME"
           
-          echo "BRANCH_FULL_NAME=BRANCH_NAME >> $GITHUB_OUPUT"
+          echo "BRANCH_FULL_NAME=$BRANCH_NAME >> $GITHUB_OUPUT"
         env:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
@@ -52,13 +52,13 @@ jobs:
           git pull
           git checkout -b $BRANCH_NAME
           git push origin $BRANCH_NAME
-          echo "BRANCH_FULL_NAME=BRANCH_NAME >> $GITHUB_OUPUT"
+          echo "BRANCH_FULL_NAME=$BRANCH_NAME >> $GITHUB_OUPUT"
           echo "BRANCH_SHA=$(git rev-parse HEAD) >> $GITHUB_OUPUT"
         env:
           BRANCH_NAME: ${{ steps.set_branch_name.outputs.BRANCH_FULL_NAME }}
       
       - name: Create Pull Request
-        run: gh pr create --title "$BRANCH_NAME" --body "test" --head "${{ steps.create_branch_pr.outputs.branch_name }}" --base "main"
+        run: gh pr create --title "$BRANCH_NAME" --body "test" --head "$BRANCH_NAME" --base "main"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH_NAME: ${{ steps.create_branch.outputs.BRANCH_FULL_NAME }}
