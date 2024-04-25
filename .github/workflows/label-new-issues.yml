@@ -42,6 +42,8 @@ jobs:
           
           echo "BRANCH_FULL_NAME=$BRANCH_NAME >> $GITHUB_OUPUT"
         env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
 
@@ -57,6 +59,8 @@ jobs:
           echo "BRANCH_FULL_NAME=$BRANCH_NAME >> $GITHUB_OUPUT"
           echo "BRANCH_SHA=$(git rev-parse HEAD) >> $GITHUB_OUPUT"
         env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
           BRANCH_NAME: ${{ steps.set-branch-name.outputs.BRANCH_FULL_NAME }}
       
       - name: Create Pull Request
