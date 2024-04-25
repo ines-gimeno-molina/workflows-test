@@ -34,8 +34,11 @@ jobs:
           # Extract issue title and replace spaces with hyphens
           ISSUE_TITLE=$(echo "$ISSUE_TITLE" | tr ' ' '-')
           
+          echo "Issue title: $ISSUE_TITLE"
+          
           # Concatenate issue number and transformed title to form branch name
           BRANCH_NAME="${ISSUE_NUMBER}-${ISSUE_TITLE}"
+          echo "full branch name: $BRANCH_NAME"
           
           echo "BRANCH_FULL_NAME=BRANCH_NAME >> $GITHUB_OUPUT"
         env:
