@@ -18,10 +18,10 @@ jobs:
       - name: Create PR
         run: |
           echo "Get the list of PR for that branch that are open"
-          gh pr list -H $BRANCH_TO_MERGE --json number -s "open" > pr_list.json
-          pr_count=$(jq length pr_list.json)
+          PR_COUNT = $(gh pr list -H $BRANCH_TO_MERGE -s "open")
+          echo $PR_COUNT
           echo "Checking  if there are any PR already"
-          if [[ pr_count -gt 0 ]]; then
+          if [[ $PR_COUNT -gt 0 ]]; then
             echo "Indeed there is at least one PR for this branch"
           else
             echo "There is no PR for this branch so we create one"
