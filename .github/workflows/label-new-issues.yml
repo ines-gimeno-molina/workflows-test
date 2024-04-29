@@ -49,13 +49,12 @@ jobs:
         id: create-branch
         run: |
           echo "We will create a branch with this name: $BRANCH_NAME"
-          echo "or this name: ${{ steps.set-branch-name.outputs.BRANCH_FULL_NAME }}"
           git checkout main
           git pull
           git checkout -b $BRANCH_NAME
           git push origin $BRANCH_NAME
-          echo "BRANCH_FULL_NAME=$BRANCH_NAME" >> "$GITHUB_OUPUT"
-          echo "BRANCH_SHA=$(git rev-parse HEAD)" >> "$GITHUB_OUPUT"
+          echo "::set-output name=BRANCH_FULL_NAME::$BRANCH_NAME"
+          echo "::set-output name=BRANCH_SHA::$(git rev-parse HEAD)"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
