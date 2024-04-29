@@ -1,0 +1,29 @@
+name: Check if outputs are validated by a qc program in another branch
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  check_if_outputs_are_qced:
+  
+    runs-on: ubuntu-latest
+    
+    permissions: 
+        issues: write
+        contents: write
+        pull-requests: write
+        discussions: write
+        
+    steps:
+      - name: Current branch
+        id: get-branch
+        run: echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_HEAD_REF})"
+       
+      - name: Check qc branch exists
+        id: qc-branch-exists
+        run: |
+          export BRANCHES=$(git branch -r)
+          echo $BRANCHES | grep ${{ steps.get-branch.outputs.branch }}
