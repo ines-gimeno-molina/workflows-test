@@ -49,9 +49,7 @@ jobs:
         id: create-branch
         run: |
           echo "We will create a branch with this name: $BRANCH_NAME"
-          git checkout main
-          git pull
-          git checkout dev
+          git pull origin dev
           git checkout -b $BRANCH_NAME
           git push origin $BRANCH_NAME
           echo "::set-output name=BRANCH_FULL_NAME::$BRANCH_NAME"
