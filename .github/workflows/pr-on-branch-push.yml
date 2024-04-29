@@ -18,6 +18,8 @@ jobs:
       - name: Create PR
         run: |
           echo "Get the list of PR for that branch that are open"
+          gh pr list -H $BRANCH_TO_MERGE -s "open"
+          gh pr list -H ${{ github.ref_name}} -s "open"
           PR_COUNT=$(gh pr list -H $BRANCH_TO_MERGE -s "open" | wc -l)
           echo $PR_COUNT
           echo "Checking  if there are any PR already"
