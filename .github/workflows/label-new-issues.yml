@@ -37,7 +37,7 @@ jobs:
           BRANCH_NAME="${ISSUE_NUMBER}-${ISSUE_TITLE}"
           echo "full branch name: $BRANCH_NAME"
           
-          echo "BRANCH_FULL_NAME=$BRANCH_NAME" >> "$GITHUB_OUPUT"
+          echo "::set-output name=BRANCH_FULL_NAME::$BRANCH_NAME"
         env:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
