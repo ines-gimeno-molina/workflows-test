@@ -49,8 +49,6 @@ jobs:
         id: create-branch
         run: |
           echo "We will create a branch with this name: $BRANCH_NAME"
-          git checkout main
-          git pull
           git checkout -b $BRANCH_NAME
           git push origin $BRANCH_NAME
           echo "::set-output name=BRANCH_FULL_NAME::$BRANCH_NAME"
@@ -59,13 +57,3 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           BRANCH_NAME: ${{ steps.set-branch-name.outputs.BRANCH_FULL_NAME }}
-      
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ steps.set-branch-name.outputs.BRANCH_FULL_NAME }}
-          base: 'main'
-          title: 'Automated pull request'
-          body: 'This pull request was automatically created by a GitHub Actions workflow.'
-
