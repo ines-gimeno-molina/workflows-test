@@ -16,12 +16,12 @@ jobs:
           ref: dev
 
       - name: Create PR
-        run: gh pr create -B $BASE_BRANCH -H $BRANCH_TO_MERGE --title $PR_TITLE --body $PR_BODY
+        run: gh pr create -B $BASE_BRANCH -H $BRANCH_TO_MERGE --title "tevd" --body "heiueh"
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             PR_TITLE: "Autocreated PR"
             PR_BODY: "Created by Github action"
             BASE_BRANCH: "dev"
-            BRANCH_TO_MERGE: $GITHUB_REF
+            BRANCH_TO_MERGE: ${{ github.ref}}
             
       
