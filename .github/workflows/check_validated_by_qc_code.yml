@@ -18,6 +18,9 @@ jobs:
         discussions: write
         
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
       - name: Current branch
         id: get-branch
         run: echo "::set-output name=BRANCH_NAME::$(echo ${GITHUB_HEAD_REF})"
@@ -27,7 +30,7 @@ jobs:
         run: |
           echo $BRANCH_NAME
           QC_BRANCH_NAME="${BRANCH_NAME}_qc"
-          echo QC_BRANCH_NAME
+          echo $QC_BRANCH_NAME
           export BRANCHES=$(git branch -r)
           echo $BRANCHES | grep qc
         env:
