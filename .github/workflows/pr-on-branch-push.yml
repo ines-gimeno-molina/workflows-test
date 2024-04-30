@@ -4,6 +4,8 @@ on:
     branches-ignore:
       - main
       - dev
+  pull_request:
+    types: [opened]
 
 jobs:
   create-pull-request:
@@ -39,6 +41,15 @@ jobs:
         run: gh pr view
         env:
           GH_TOKEN: ${{ github.token }}
+
+  copy-labels:
+    runs-on: ubuntu-latest
+    name: Copy labels from linked issues
+    steps:
+      - name: copy-labels
+        uses: michalvankodev/copy-issue-labels@v1.3.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
         
             
