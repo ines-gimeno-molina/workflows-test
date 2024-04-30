@@ -40,13 +40,21 @@ jobs:
       - name: Get PR number
         id: get_pr_number
         run: |
-          echo $(gh pr view ${{ github.ref_name }} --json number)
-          echo $(gh pr view ${{ github.ref_name }} --json number --jq '.number')
           PR_NUMBER=$(gh pr view ${{ github.ref_name }} --json number --jq '.number')
           echo "PR Number: $PR_NUMBER"
           echo "::set-output name=pr_number::$PR_NUMBER"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Open PR
+        run: git pr checkout $PR_NUMBER
+        env:
+          PR_NUMBER: ${{ steps.get_pr_number.outputs.pr_number}}
+
+      - name: Link Issue label to PR
+        uses: michalvankodev/copy-issue-labels@v1.3.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
 
 
