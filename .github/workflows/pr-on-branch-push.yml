@@ -37,6 +37,8 @@ jobs:
 
       - name: View PR
         run: gh pr view
+        env:
+          GH_TOKEN: ${{ github.token }}
 
         
             
