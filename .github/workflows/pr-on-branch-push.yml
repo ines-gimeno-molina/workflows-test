@@ -34,5 +34,10 @@ jobs:
             PR_BODY: "Created by Github action"
             BASE_BRANCH: "dev"
             BRANCH_TO_MERGE: ${{ github.ref}}
+
+      - name: View PR
+        run: gh pr view
+
+        
             
       
