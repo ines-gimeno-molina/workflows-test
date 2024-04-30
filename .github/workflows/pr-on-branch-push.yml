@@ -40,11 +40,11 @@ jobs:
       - name: Get linked issue number to PR
         id: get_issue_number
         run: |
-          ISSUE_NUMBER=$(jq --raw-output .issue.url <<< "$(curl -s -H "Authorization: token $GITHUB_TOKEN" ${{ github.event.pull_request.issue_url }})")
+          ISSUE_URL=$(jq --raw-output '.issue.url' <<< "${{ github.event.pull_request }}")
+          ISSUE_NUMBER=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" $ISSUE_URL | jq --raw-output '.number')
           echo "::set-output name=issue_number::$ISSUE_NUMBER"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
       - name: Copy labels from linked issues
         if: ${{ steps.get_issue_number.outputs.issue_number }}
