@@ -44,16 +44,14 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v2
-
+        
       - name: Create Branch 
         id: create-branch
         run: |
           echo "We will create a branch with this name: $BRANCH_NAME"
-          git checkout -b $BRANCH_NAME
-          git push origin $BRANCH_NAME
-          echo "::set-output name=BRANCH_FULL_NAME::$BRANCH_NAME"
-          echo "::set-output name=BRANCH_SHA::$(git rev-parse HEAD)"
+          gh issue develop $ISSUE_NUMBER -b dev -n $BRANCH_NAME
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           BRANCH_NAME: ${{ steps.set-branch-name.outputs.BRANCH_FULL_NAME }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
