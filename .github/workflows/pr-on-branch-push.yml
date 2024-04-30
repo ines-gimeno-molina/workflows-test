@@ -37,10 +37,15 @@ jobs:
             BASE_BRANCH: "dev"
             BRANCH_TO_MERGE: ${{ github.ref}}
 
-      - name: Print list of PR
-        run: gh pr view ${{ github.ref_name}}
+      - name: Get PR number
+        id: get_pr_number
+        run: |
+          PR_NUMBER=$(gh pr view ${{ github.ref_name }} | jq --raw-output '.number')
+          echo "PR Number: $PR_NUMBER"
+          echo "::set-output name=pr_number::$PR_NUMBER"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
 
         
