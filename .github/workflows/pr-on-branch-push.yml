@@ -50,11 +50,13 @@ jobs:
         run: git pr checkout $PR_NUMBER
         env:
           PR_NUMBER: ${{ steps.get_pr_number.outputs.pr_number}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Link Issue label to PR
         uses: michalvankodev/copy-issue-labels@v1.3.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 
