@@ -1,0 +1,48 @@
+name: Check if outputs are validated by a qc program in another branch
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  check_if_outputs_are_qced:
+  
+    runs-on: ubuntu-latest
+    
+    permissions: 
+        issues: write
+        contents: write
+        pull-requests: write
+        discussions: write
+        
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Current branch
+        id: get-branch
+        run: echo "::set-output name=BRANCH_NAME::$(echo ${GITHUB_HEAD_REF})"
+       
+      - name: Check qc branch exists
+        id: qc-branch-exists
+        run: |
+          echo $BRANCH_NAME
+          QC_BRANCH_NAME="${BRANCH_NAME}_qc"
+          echo $QC_BRANCH_NAME
+          git ls-remote --exit-code --heads origin $QC_BRANCH_NAME >/dev/null 2>&1
+          EXIT_CODE=$?
+          if [[ $EXIT_CODE == '0' ]]; then
+            echo "A qc branch called '$QC_BRANCH_NAME' exists in the remote repository"
+          elif [[ $EXIT_CODE == '2' ]]; then
+            echo "A qc branch called '$QC_BRANCH_NAME' does not exist in the remote repository"
+            echo "Please investigate why the qc branch doesn't exist."
+            echo "For e.g. has the qc programmer sync-ed their code to the remote repository?"
+            exit 1
+          fi
+        env:
+          BRANCH_NAME: ${{ steps.get-branch.outputs.BRANCH_NAME }}
+      - name: Get checksum for prod
+        run: |
+          git diff --name-only dev .hashes/
