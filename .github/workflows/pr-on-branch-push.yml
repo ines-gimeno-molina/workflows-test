@@ -37,21 +37,10 @@ jobs:
             BASE_BRANCH: "dev"
             BRANCH_TO_MERGE: ${{ github.ref}}
 
-      - name: Get linked issue number to PR
-        id: get_issue_number
-        run: |
-          ISSUE_URL=$(jq --raw-output '.issue.url' <<< "${{ github.event.pull_request }}")
-          ISSUE_NUMBER=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" $ISSUE_URL | jq --raw-output '.number')
-          echo "::set-output name=issue_number::$ISSUE_NUMBER"
+      - name: Print list of PR
+        run: gh pr view ${{ github.ref_name}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Copy labels from linked issues
-        if: ${{ steps.get_issue_number.outputs.issue_number }}
-        uses: michalvankodev/copy-issue-labels@v1.3.0
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ steps.get_issue_number.outputs.issue_number }}
 
 
         
