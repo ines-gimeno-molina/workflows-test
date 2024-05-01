@@ -7,20 +7,38 @@ on:
 
 jobs:
   create-pull-request:
-    if: $(git rev-parse "${{ github.sha }}")!=$(git rev-parse "refs/heads/dev")
     runs-on: ubuntu-latest
     permissions:
       issues: read
       contents: read
       pull-requests: write
     steps:
+    
       - name: Check out repository code
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
           ref: dev
 
+      - name: Check for branch changes
+        id: check_branch_changes
+        run: |
+          NEW_BRANCH_SHA=$(git rev-parse "${{ github.sha }}")
+          echo "This is the new branch sha: $NEW_BRANCH_SHA"
+          
+          DEV_BRANCH_SHA=$(git rev-parse "refs/heads/dev")
+          echo "This is the new branch sha: $DEV_BRANCH_SHA"
+          if [[ "${NEW_BRANCH_SHA}" == "${DEV_BRANCH_SHA}" ]]; then
+              echo "::set-output name=IS_SAME_BRANCH::true"
+            else
+              echo "::set-output name=IS_SAME_BRANCH::false"
+            fi
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create PR
+        if: ${{ steps.check_branch_changes.outputs.IS_SAME_BRANCH}} == 'false'
         run: |
           echo "Get the list of PR for that branch that are open"
           gh pr list -H ${{ github.ref_name}} -s "open"
@@ -41,6 +59,7 @@ jobs:
             BRANCH_TO_MERGE: ${{ github.ref}}
 
       - name: Get PR number
+        if: ${{ steps.check_branch_changes.outputs.IS_SAME_BRANCH}} == 'false'
         id: get_pr_number
         run: |
           PR_NUMBER=$(gh pr view ${{ github.ref_name }} --json number --jq '.number')
@@ -50,6 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get the pull request data
+        if: ${{ steps.check_branch_changes.outputs.IS_SAME_BRANCH}} == 'false'
         run: |
           gh api \
           -H "Accept: application/vnd.github+json" \
