@@ -29,15 +29,17 @@ jobs:
           DEV_BRANCH_SHA=$(git rev-parse "refs/heads/dev")
           echo "This is the new branch sha: $DEV_BRANCH_SHA"
           if [[ "${NEW_BRANCH_SHA}" == "${DEV_BRANCH_SHA}" ]]; then
-              echo "::set-output name=IS_SAME_BRANCH::true"
+              echo "::set-output name=no_differences::true"
+              echo "No differences"
           else
-            echo "::set-output name=IS_SAME_BRANCH::false"
+            echo "::set-output name=no_differences::false"
+            echo "There are differences"
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create PR
-        if: ${{ steps.check_branch_changes.outputs.IS_SAME_BRANCH}} == 'false'
+        if: steps.check_branch_changes.outputs.no_differences == 'false'
         run: |
           echo "Get the list of PR for that branch that are open"
           gh pr list -H ${{ github.ref_name}} -s "open"
