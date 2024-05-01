@@ -13,6 +13,12 @@ jobs:
       contents: read
       pull-requests: write
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: dev
+
       - name: Check for branch changes
         id: check_branch_changes
         run: |
@@ -21,12 +27,6 @@ jobs:
             exit 0
           fi
         if: github.event_name == 'push' && github.ref_type == 'branch'
-    
-      - name: Check out repository code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          ref: dev
 
       - name: Create PR
         run: |
