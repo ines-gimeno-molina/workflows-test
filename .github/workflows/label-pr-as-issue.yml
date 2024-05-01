@@ -1,6 +1,6 @@
 on: 
-  pull_request:
-    types: [opened, unassigned]
+  pull_request_target:
+    types: [opened, synchronize, reponed]
 
 jobs:
   copy-labels:
