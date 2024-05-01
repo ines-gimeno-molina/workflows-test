@@ -55,7 +55,7 @@ jobs:
           gh api \
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          /repos/ines-gimeno-molina/workflows-test/pulls/$PR_NUMBER
+          /repos/ines-gimeno-molina/workflows-test/pulls/$PR_NUMBER | jq -r '.issue_url'
         env:
           PR_NUMBER: ${{ steps.get_pr_number.outputs.pr_number}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
