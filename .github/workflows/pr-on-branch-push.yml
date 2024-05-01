@@ -60,7 +60,11 @@ jobs:
           PR_NUMBER: ${{ steps.get_pr_number.outputs.pr_number}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
+      - name: Copy labels from linked issues
+        if: github.event_name == 'pull_request'
+        uses: michalvankodev/copy-issue-labels@v1.3.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
 
         
