@@ -50,8 +50,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Open PR
-        run: gh pr checkout $PR_NUMBER
+      - name: Get the pull request data
+        run: |
+          gh api \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          /repos/ines-gimeno-molina/workflows-test/pulls/$PR_NUMBER
         env:
           PR_NUMBER: ${{ steps.get_pr_number.outputs.pr_number}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
