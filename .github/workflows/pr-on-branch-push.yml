@@ -60,7 +60,7 @@ jobs:
             BRANCH_TO_MERGE: ${{ github.ref}}
 
       - name: Get PR number
-        if: ${{ steps.check_branch_changes.outputs.IS_SAME_BRANCH}} == 'false'
+        if: steps.check_branch_changes.outputs.no_differences == 'false'
         id: get_pr_number
         run: |
           PR_NUMBER=$(gh pr view ${{ github.ref_name }} --json number --jq '.number')
@@ -70,7 +70,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get the pull request data
-        if: ${{ steps.check_branch_changes.outputs.IS_SAME_BRANCH}} == 'false'
+        if: steps.check_branch_changes.outputs.no_differences == 'false'
         run: |
           gh api \
           -H "Accept: application/vnd.github+json" \
