@@ -4,8 +4,6 @@ on:
     branches-ignore:
       - main
       - dev
-  pull_request:
-    types: [opened]
 
 jobs:
   create-pull-request:
@@ -35,7 +33,7 @@ jobs:
               gh pr create -B $BASE_BRANCH -H $BRANCH_TO_MERGE --title "$PR_TITLE" --body "$PR_BODY"
           fi
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GIT_WORKFLOW_TEST }}
             PR_TITLE: "Autocreated PR: ${{ github.ref_name}}"
             PR_BODY: "Created by Github action"
             BASE_BRANCH: "dev"
@@ -59,12 +57,6 @@ jobs:
         env:
           PR_NUMBER: ${{ steps.get_pr_number.outputs.pr_number}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Copy labels from linked issues
-        if: github.event_name == 'pull_request'
-        uses: michalvankodev/copy-issue-labels@v1.3.0
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
 
         
