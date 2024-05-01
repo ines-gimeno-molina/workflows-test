@@ -30,9 +30,8 @@ jobs:
           echo "This is the new branch sha: $DEV_BRANCH_SHA"
           if [[ "${NEW_BRANCH_SHA}" == "${DEV_BRANCH_SHA}" ]]; then
               echo "::set-output name=IS_SAME_BRANCH::true"
-            else
-              echo "::set-output name=IS_SAME_BRANCH::false"
-            fi
+          else
+            echo "::set-output name=IS_SAME_BRANCH::false"
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
