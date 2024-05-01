@@ -7,6 +7,7 @@ on:
 
 jobs:
   create-pull-request:
+    if: 
     runs-on: ubuntu-latest
     permissions:
       issues: read
@@ -22,11 +23,13 @@ jobs:
       - name: Check for branch changes
         id: check_branch_changes
         run: |
-          if git diff --quiet ${{ github.event.before }} ${{ github.sha }}; then
-            echo "No changes in the branch. Exiting workflow."
-            exit 0
-          fi
-        if: github.event_name == 'push' && github.ref_type == 'branch'
+          NEW_BRANCH_SHA=$(git rev-parse "${{ github.sha }}")
+          echo "This is the new branch sha: $NEW_BRANCH_SHA"
+          DEV_BRANCH_SHA=$(git rev-parse "refs/heads/dev")
+          echo "This is the new branch sha: $DEV_BRANCH_SHA"
+          if [[ "${NEW_BRANCH_SHA}" == "${DEV_BRANCH_SHA}" ]]; then
+              echo "No new commits in the branch. Exiting workflow."
+              exit 0
 
       - name: Create PR
         run: |
