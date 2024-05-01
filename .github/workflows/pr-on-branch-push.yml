@@ -7,7 +7,6 @@ on:
 
 jobs:
   create-pull-request:
-    if: 
     runs-on: ubuntu-latest
     permissions:
       issues: read
@@ -30,6 +29,8 @@ jobs:
           if [[ "${NEW_BRANCH_SHA}" == "${DEV_BRANCH_SHA}" ]]; then
               echo "No new commits in the branch. Exiting workflow."
               exit 0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create PR
         run: |
