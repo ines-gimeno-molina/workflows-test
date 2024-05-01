@@ -7,6 +7,7 @@ on:
 
 jobs:
   create-pull-request:
+    if: $(git rev-parse "${{ github.sha }}")!=$(git rev-parse "refs/heads/dev")
     runs-on: ubuntu-latest
     permissions:
       issues: read
@@ -18,19 +19,6 @@ jobs:
         with:
           fetch-depth: 0
           ref: dev
-
-      - name: Check for branch changes
-        id: check_branch_changes
-        run: |
-          NEW_BRANCH_SHA=$(git rev-parse "${{ github.sha }}")
-          echo "This is the new branch sha: $NEW_BRANCH_SHA"
-          DEV_BRANCH_SHA=$(git rev-parse "refs/heads/dev")
-          echo "This is the new branch sha: $DEV_BRANCH_SHA"
-          if [[ "${NEW_BRANCH_SHA}" == "${DEV_BRANCH_SHA}" ]]; then
-              echo "No new commits in the branch. Exiting workflow."
-              exit 0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create PR
         run: |
