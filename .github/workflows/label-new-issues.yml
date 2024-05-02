@@ -17,11 +17,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         
-      - name: Debug File System
+      - name: Get conditions.json path
         run: |
-          pwd  # Print current working directory
           cd .github/workflows
-          ls
+          ROOT_PATH=$(pwd)
+          CONDITIONS_PATH="${ROOT_PATH}/conditions.json"
+          echo "::set-output name=conditions_path::$CONDITIONS_PATH"
 
       - name: Read conditions from JSON
         id: read-conditions
