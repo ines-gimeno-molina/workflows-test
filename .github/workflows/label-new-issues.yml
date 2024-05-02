@@ -18,6 +18,7 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Get conditions.json path
+        id: get-conditions-path
         run: |
           cd .github/workflows
           ROOT_PATH=$(pwd)
@@ -28,9 +29,28 @@ jobs:
       - name: Read conditions from JSON
         id: read-conditions
         run: |
-          CONDITIONS=$(cat .github/workflows/conditions.json)
-          echo "We made it here"
-          echo "::set-output name=CONDITIONS::$CONDITIONS"
+          CONDITIONS=$(cat ${CONDITIONS_PATH})
+          echo "::set-output name=conditions::$CONDITIONS"
+        env:
+          CONDITIONS_PATH: ${{ steps.get-conditions-path.outputs.conditions_path }}
+      
+      - name: Determine label based on condition
+        id: determine-label
+        run: |
+          ISSUE_TITLE="${{ github.event.issue.title }}"
+          LABEL=""
+          for row in $(echo "${{ steps.read-conditions.outputs.conditions }}" | jq -r '.conditions[] | @base64'); do
+            _jq() {
+              echo ${row} | base64 --decode | jq -r ${1}
+            }
+            if [[ "${ISSUE_TITLE}" == "$(_jq '.prefix')"* ]]; then
+              LABEL="$(_jq '.label')"
+              break
+            fi
+          done
+          echo "$LABEL"
+          echo "::set-output name=LABEL::$LABEL"
+        shell: bash
           
       - name: Print check
         run: echo "There is an issue containing the word testing"
