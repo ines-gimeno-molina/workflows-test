@@ -22,6 +22,7 @@ jobs:
           cd .github/workflows
           ROOT_PATH=$(pwd)
           CONDITIONS_PATH="${ROOT_PATH}/conditions.json"
+          echo "$CONDITIONS_PATH"
           echo "::set-output name=conditions_path::$CONDITIONS_PATH"
 
       - name: Read conditions from JSON
