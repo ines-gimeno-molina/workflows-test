@@ -17,7 +17,7 @@ jobs:
       - name: Read conditions from JSON
         id: read-conditions
         run: |
-          CONDITIONS=$(cat conditions.json)
+          CONDITIONS=$(cat .github/workflows/conditions.json)
           echo "We made it here"
           echo "::set-output name=CONDITIONS::$CONDITIONS"
           
