@@ -20,7 +20,8 @@ jobs:
       - name: Debug File System
         run: |
           pwd  # Print current working directory
-          ls -R  # List all files and directories recursively
+          cd .github/workflows
+          ls
 
       - name: Read conditions from JSON
         id: read-conditions
