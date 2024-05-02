@@ -14,15 +14,13 @@ jobs:
       pull-requests: write
       discussions: write
     steps:
-
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
       - name: Debug File System
         run: |
           pwd  # Print current working directory
           ls -R  # List all files and directories recursively
-          echo "Files in .github/workflows directory:"
-          ls -l .github/workflows  # List files in .github/workflows directory
-          echo "Contents of conditions.json:"
-          cat .github/workflows/conditions.json  # Print contents of conditions.json
 
       - name: Read conditions from JSON
         id: read-conditions
@@ -58,9 +56,6 @@ jobs:
         env:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
-
-      - name: Checkout repository
-        uses: actions/checkout@v2
         
       - name: Create Branch 
         id: create-branch
