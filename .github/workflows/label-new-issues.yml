@@ -36,9 +36,9 @@ jobs:
       - name: Determine label based on condition
         id: determine-label
         run: |
-          for row in $CONDITIONS
+          for ROW in $CONDITIONS
           do
-            echo row
+            echo $ROW
           done
         env:
           ISSUE_TITLE: ${{ github.event.issue.title }}
