@@ -42,7 +42,7 @@ jobs:
             _jq() {
               echo ${row} | base64 --decode | jq -r ${1}
             }
-            if [[ "${ISSUE_TITLE}" == "$(_jq '.prefix')"* ]]; then
+            if [[ "${ISSUE_TITLE}" == "$(_jq '.program')"* ]]; then
               LABEL="$(_jq '.label')"
               break
             fi
