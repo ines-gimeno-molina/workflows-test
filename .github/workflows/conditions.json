@@ -1,0 +1,21 @@
+{
+  "conditions": [
+    {
+      "program": "adsl",
+      "label": "most-critical"
+    },
+    {
+      "program": "adlb",
+      "label": "most-critical"
+    },
+    {
+      "program": "test2",
+      "label": "critical"
+    },
+    {
+      "program": "test3",
+      "label": "non-critical"
+    }
+    // Add more conditions and labels as needed
+  ]
+}
