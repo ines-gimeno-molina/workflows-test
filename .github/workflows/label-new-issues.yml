@@ -36,9 +36,10 @@ jobs:
       - name: Determine label based on condition
         id: determine-label
         run: |
-          PROGRAM=$(echo "$CONDITIONS" | jq -r '.conditions[] | select(.program == "adsl") | .program')
-          LABEL=$(echo "$CONDITIONS" | jq -r '.conditions[] | select(.program == "adsl") | .label')
-          echo "Program: $PROGRAM, Label: $LABEL"
+          for row in $CONDITIONS
+          do
+            echo row
+          done
         env:
           ISSUE_TITLE: ${{ github.event.issue.title }}
           CONDITIONS: ${{ steps.read-conditions.outputs.conditions }}

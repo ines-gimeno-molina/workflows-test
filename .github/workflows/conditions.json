@@ -1,16 +1,14 @@
-{
-  "conditions": [
-    {
-      "program":"adsl",
-      "label":"most-critical"
-    },
-    {
-      "program":"adlb",
-      "label":"critical"
-    },
-    {
-      "program":"test2",
-      "label":"non-critical"
-    }
-  ]
-}
+[
+  {
+    "program": "adsl",
+    "label": "most-critical"
+  },
+  {
+    "program": "adlb",
+    "label": "critical"
+  },
+  {
+    "program": "test2",
+    "label": "non-critical"
+  }
+]
