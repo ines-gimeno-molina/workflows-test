@@ -14,6 +14,16 @@ jobs:
       pull-requests: write
       discussions: write
     steps:
+
+      - name: Debug File System
+        run: |
+          pwd  # Print current working directory
+          ls -R  # List all files and directories recursively
+          echo "Files in .github/workflows directory:"
+          ls -l .github/workflows  # List files in .github/workflows directory
+          echo "Contents of conditions.json:"
+          cat .github/workflows/conditions.json  # Print contents of conditions.json
+
       - name: Read conditions from JSON
         id: read-conditions
         run: |
