@@ -36,20 +36,12 @@ jobs:
       - name: Determine label based on condition
         id: determine-label
         run: |
-          ISSUE_TITLE="${{ github.event.issue.title }}"
-          LABEL=""
-          for row in $(echo "${{ steps.read-conditions.outputs.conditions }}" | jq -r '.conditions[] | @base64'); do
-            _jq() {
-              echo ${row} | base64 --decode | jq -r ${1}
-            }
-            if [[ "${ISSUE_TITLE}" == "$(_jq '.program')"* ]]; then
-              LABEL="$(_jq '.label')"
-              break
-            fi
-          done
-          echo "$LABEL"
-          echo "::set-output name=LABEL::$LABEL"
-        shell: bash
+          PROGRAM=$(echo "$CONDITIONS" | jq -r '.conditions[] | select(.program == "adsl") | .program')
+          LABEL=$(echo "$CONDITIONS" | jq -r '.conditions[] | select(.program == "adsl") | .label')
+          echo "Program: $PROGRAM, Label: $LABEL"
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          CONDITIONS: ${{ steps.read-conditions.outputs.conditions }}
           
       - name: Print check
         run: echo "There is an issue containing the word testing"
