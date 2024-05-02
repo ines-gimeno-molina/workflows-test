@@ -6,7 +6,6 @@ on:
 
 jobs:
   label-and-create-branch:
-    if: startsWith(github.event.issue.title, 'testing')
     runs-on: ubuntu-latest
     permissions: 
       issues: write
