@@ -6,14 +6,10 @@
     },
     {
       "program": "adlb",
-      "label": "most-critical"
-    },
-    {
-      "program": "test2",
       "label": "critical"
     },
     {
-      "program": "test3",
+      "program": "test2",
       "label": "non-critical"
     }
   ]
