@@ -36,7 +36,7 @@ jobs:
       - name: Determine label based on condition
         id: determine-label
         run: |
-          label_out=$(jq -r '.[] | select(.program == "adlb") | .label' $CONDITIONS_PATH)
+          label_out=$(jq -r '.[] | select(.program == "$ISSUE_TITLE") | .label' $CONDITIONS_PATH)
           echo "Label: $label_out"
         env:
           CONDITIONS_PATH: ${{ steps.get-conditions-path.outputs.conditions_path }}
