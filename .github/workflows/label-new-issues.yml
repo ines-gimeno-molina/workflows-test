@@ -36,11 +36,11 @@ jobs:
       - name: Determine label based on condition
         id: determine-label
         run: |
-          for ROW in $CONDITIONS
-          do
-            echo $ROW
+          jq -c '.[]' $CONDITIONS_PATH | while read item; do
+          echo "$item"
           done
         env:
+          CONDITIONS_PATH: ${{ steps.get-conditions-path.outputs.conditions_path }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
           CONDITIONS: ${{ steps.read-conditions.outputs.conditions }}
           
