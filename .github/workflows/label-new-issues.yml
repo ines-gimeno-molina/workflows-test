@@ -24,25 +24,17 @@ jobs:
           CONDITIONS_PATH="${ROOT_PATH}/conditions.json"
           echo "$CONDITIONS_PATH"
           echo "::set-output name=conditions_path::$CONDITIONS_PATH"
-
-      - name: Read conditions from JSON
-        id: read-conditions
-        run: |
-          CONDITIONS=$(cat ${CONDITIONS_PATH})
-          echo "::set-output name=conditions::$CONDITIONS"
-        env:
-          CONDITIONS_PATH: ${{ steps.get-conditions-path.outputs.conditions_path }}
       
       - name: Determine label based on condition
         id: determine-label
         run: |
           label_out=$(jq -r --arg issueTitle "$ISSUE_TITLE" '.[] | select(.program == $issueTitle) | .label' $CONDITIONS_PATH)
           echo "Label: $label_out"
+          echo "::set-output name=label::$label_out"
         env:
           CONDITIONS_PATH: ${{ steps.get-conditions-path.outputs.conditions_path }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
-          CONDITIONS: ${{ steps.read-conditions.outputs.conditions }}
-          
+
       - name: Print check
         run: echo "There is an issue containing the word testing"
         
@@ -52,7 +44,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.issue.number }}
-          LABELS: test
+          LABELS: ${{ steps.determine-label.outputs.label }}
         
       - name: Set Branch Name
         id: set-branch-name
